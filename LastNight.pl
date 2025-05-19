@@ -257,10 +257,34 @@ examine(Object) :-
 examine(_) :-
     write('You don\'t see that here.'), nl.
 
+
+describe_backpack_item(hunting_knife) :-
+    write('  A sharp hunting knife. Useful for close combat.'), nl.
+describe_backpack_item(pistol) :-
+    write('  A semi-automatic pistol. It\'s empty, but could be useful if you find ammo.'), nl.
+describe_backpack_item(canned_food) :-
+    write('  Some canned food. It will help you survive longer.'), nl.
+describe_backpack_item(water_bottle) :-
+    write('  A half-full water bottle. Essential for survival.'), nl.
+describe_backpack_item(radio) :-
+    write('  A small emergency radio. It occasionally picks up transmissions.'), nl.
+describe_backpack_item(_) :- true.
+
 % Object descriptions
 examine_object(backpack) :-
     write('A sturdy backpack that can hold your supplies.'), nl,
-    write('You should check what\'s inside.'), nl.
+    write('You open the backpack to see what\'s inside:'), nl,
+    findall(Item, at(Item, backpack), Items),
+    (Items = [] ->
+        write('The backpack is empty.')
+    ;
+        write('Inside the backpack, you find:'), nl,
+        forall(member(Item, Items), (
+            format('- ~w~n', [Item]),
+            describe_backpack_item(Item)
+        ))
+    ),
+    nl.
 examine_object(hunting_knife) :-
     write('A sharp hunting knife. Good for close combat with zombies.'), nl.
 examine_object(pistol) :-
@@ -298,8 +322,7 @@ take(Object) :-
     !.
 take(Object) :-
     at(Object, backpack),
-    at(player, Location),
-    at(backpack, Location),
+    (at(player, backpack) ; (at(player, Location), at(backpack, Location))),
     retract(at(Object, backpack)),
     assertz(holding(Object)),
     format('You took the ~w from your backpack.~n', [Object]),
@@ -925,9 +948,11 @@ restart :- start.
 check_backpack :-
     at(player, Location),
     at(backpack, Location),
-    retract(at(player, Location)),
-    assertz(at(player, backpack)),
-    look,
+    examine_object(backpack),
+    !.
+check_backpack :-
+    holding(backpack),
+    examine_object(backpack),
     !.
 check_backpack :-
     write('There\'s no backpack here to check.'), nl.
