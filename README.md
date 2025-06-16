@@ -1,7 +1,7 @@
 # LastNight
 
 ## Start the game
-  .start
+  start.
 
 ## Main Characters:
 •	The Player (You) – A survivor with basic combat skills and quick thinking.
