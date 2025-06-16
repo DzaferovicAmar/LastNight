@@ -4,7 +4,7 @@
   start.
 
 ## Main Characters:
-•	The Player (You) – A survivor with basic combat skills and quick thinking.
+•	The Player (You) – A survivor with basic combat skills and quick thinking. \br
 •	Toni Montana – A resourceful scavenger, skilled in finding supplies and lockpicking.
 •	Vin Disl – A former soldier, experienced in firearms and tactical planning.
 ## NPC’s:
